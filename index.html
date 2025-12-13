@@ -1,0 +1,703 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Vionae_Collection — Aksesori & Hadiah</title>
+  <meta name="description" content="Vionae Collection - katalog, promo, kontak, dan form masukan.">
+  <style>
+    /* ====== Visual tokens ====== */
+    :root{
+      --bg:#faf8f7;
+      --panel:#ffffff;
+      --muted:#6b6b72;
+      --accent:#b23f6b;
+      --accent-2:#ffdfe8;
+      --radius:14px;
+      --gap:22px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial; background:var(--bg); color:#222; line-height:1.45; padding:28px}
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:1100px;margin:0 auto;display:block;gap:28px}
+
+    /* ====== Header ====== */
+    header{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:18px}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{
+      width:55px;
+      height:55px;
+      border-radius:12px;
+      background:#fff;
+      display:grid;
+      place-items:center;
+      overflow:hidden;
+      border:1px solid #eee;
+    }
+    .logo img{width:100%;height:100%;object-fit:contain;display:block}
+    .brand-name{font-weight:800;font-size:1.15rem;margin-left:6px}
+    nav{display:flex;gap:10px;align-items:center}
+    nav a{padding:10px 12px;border-radius:10px;color:var(--muted)}
+    .cta{background:var(--accent);color:#fff;padding:10px 14px;border-radius:12px;font-weight:700}
+
+    /* ====== Hero / Home ====== */
+    .hero{display:grid;grid-template-columns:1fr 420px;gap:28px;padding:28px;border-radius:var(--radius);background:linear-gradient(180deg,#fff,#fff);box-shadow:0 10px 30px rgba(0,0,0,0.04)}
+    .hero h1{font-size:2rem;margin-bottom:8px}
+    .hero p{color:var(--muted);margin-bottom:12px}
+    .hero .actions{display:flex;gap:12px;flex-wrap:wrap}
+
+    /* signature block */
+    .hero-sign{background:linear-gradient(180deg,#fff,#fff);padding:12px;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.04)}
+    .hero-sign img{width:100%;border-radius:10px;display:block;object-fit:cover}
+
+    /* ====== Promo section ====== */
+    .promo-wrap{padding:22px;border-radius:12px;background:linear-gradient(90deg,var(--accent-2),rgba(255,255,255,0.7));box-shadow:0 8px 28px rgba(178,63,107,0.06)}
+    .promo-list{display:flex;gap:12px;flex-wrap:wrap}
+
+    /* ====== Featured + divider ====== */
+    .featured{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:8px}
+    .featured-card{background:var(--panel);padding:16px;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.04);display:flex;flex-direction:column;gap:10px}
+    .featured-card img{width:100%;height:160px;object-fit:cover;border-radius:10px}
+    .divider{margin:28px 0;display:flex;align-items:center;gap:12px}
+    .divider::before,.divider::after{content:'';flex:1;height:1px;background:#eee}
+    .divider strong{padding:8px 16px;background:#fff;border-radius:999px;color:var(--muted)}
+
+    /* ====== Catalog ====== */
+    #catalog{margin-top:12px}
+    .catalog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px}
+    .product{background:var(--panel);border-radius:12px;padding:14px;box-shadow:0 8px 24px rgba(0,0,0,0.04);display:flex;flex-direction:column;gap:12px}
+    .product .thumb{height:180px;border-radius:10px;overflow:hidden;background:#f3f2f2;display:grid;place-items:center}
+    .product .thumb img{width:100%;height:100%;object-fit:cover}
+    .product .name{font-weight:800}
+    .product .price{color:var(--accent);font-weight:800}
+    .product .actions{display:flex;gap:10px;align-items:center}
+    .wa-btn{background:#25D366;color:#fff;padding:10px 12px;border-radius:10px;font-weight:700;border:none;cursor:pointer}
+
+    /* ====== Contact & Feedback ====== */
+    .contact-panel{display:flex;flex-direction:column;gap:12px;padding:18px;border-radius:12px;background:var(--panel);box-shadow:0 8px 20px rgba(0,0,0,0.04)}
+    .contact-row{display:flex;gap:10px;align-items:center}
+    .chip{padding:8px 10px;border-radius:10px;background:#faf6f6;color:var(--muted);border:1px solid #f0e9ea}
+    .contact-row a{color:var(--muted); text-decoration:none}
+
+    .feedback{margin-top:12px;padding:18px;border-radius:12px;background:var(--panel);box-shadow:0 8px 20px rgba(0,0,0,0.04)}
+    label{display:block;color:var(--muted);margin-bottom:6px}
+    input,textarea{width:100%;padding:10px;border-radius:10px;border:1px solid #eee}
+    .submit{background:var(--accent);color:#fff;padding:10px 14px;border-radius:10px;border:none;cursor:pointer;font-weight:700;margin-top:8px}
+    .submit:disabled{opacity:0.6;cursor:not-allowed}
+
+    footer{margin-top:18px;text-align:center;color:var(--muted);font-size:0.92rem}
+
+    /* ====== Modal styles (product detail) ====== */
+    #productModal { position:fixed; inset:0; z-index:1200; display:none; align-items:center; justify-content:center; }
+    #productModal.show { display:flex; }
+    .modal-backdrop { position:fixed; inset:0; background:rgba(10,10,10,0.45); backdrop-filter: blur(3px); opacity:0; transition:opacity .18s ease; }
+    #productModal.show .modal-backdrop { opacity:1; }
+    .modal-panel {
+      width:min(980px,94%); max-width:1100px; background:var(--panel); border-radius:14px; box-shadow:0 18px 40px rgba(0,0,0,0.12);
+      transform:translateY(12px) scale(.995); opacity:0; transition:all .18s ease; pointer-events:auto; position:relative; padding:18px;
+    }
+    #productModal.show .modal-panel { transform:translateY(0) scale(1); opacity:1; }
+
+    .modal-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:18px; align-items:start; }
+    .modal-media img{ width:100%; height:360px; object-fit:cover; border-radius:10px; display:block; box-shadow:0 8px 24px rgba(0,0,0,0.06); }
+    .modal-name{ font-size:1.15rem; margin:0 0 8px 0; font-weight:900; }
+    .modal-price{ color:var(--accent); font-weight:900; margin-bottom:10px; font-size:1.05rem; }
+    .modal-desc{ color:var(--muted); line-height:1.45; max-height:220px; overflow:auto; padding-right:6px; }
+
+    .modal-close{ position:absolute; right:12px; top:12px; border:0; background:transparent; font-size:22px; cursor:pointer; border-radius:8px; padding:6px; color:var(--muted); }
+    .modal-close:hover{ background:rgba(0,0,0,0.04); }
+
+    /* CART DRAWER STYLES */
+    #cartDrawer { position:fixed; inset:0; z-index:1100; display:none; align-items:stretch; pointer-events:none; }
+    #cartDrawer.show { display:flex; pointer-events:auto; }
+    .cart-backdrop { position:fixed; inset:0; background:rgba(0,0,0,0.36); opacity:0; transition:opacity .18s ease; pointer-events:none; }
+    #cartDrawer.show .cart-backdrop { opacity:1; pointer-events:auto; }
+    .cart-panel { margin-left:auto; width:360px; max-width:94%; background:var(--panel); border-radius:12px 0 0 12px; box-shadow:0 18px 40px rgba(0,0,0,0.12); transform:translateX(20px); opacity:0; transition:all .18s ease; pointer-events:auto; display:flex;flex-direction:column; }
+    #cartDrawer.show .cart-panel { transform:translateX(0); opacity:1; }
+    .cart-item { display:flex; gap:10px; padding:10px 0; align-items:center; border-bottom:1px dashed rgba(0,0,0,0.03); }
+    .cart-item img{ width:64px; height:64px; object-fit:cover; border-radius:8px; }
+    .cart-item .info{ flex:1; }
+    .cart-item .info .title{ font-weight:800; margin-bottom:6px; }
+    .cart-item .actions{ display:flex; gap:8px; align-items:center; }
+    .cart-qty { width:56px; padding:6px; border-radius:8px; border:1px solid rgba(0,0,0,0.06); text-align:center; }
+    .cart-remove { background:none;border:0;color:var(--muted);cursor:pointer;padding:6px; }
+    #openCartBtn{ position:fixed;right:22px;bottom:100px;background:var(--accent);color:#fff;border:0;border-radius:999px;padding:12px 14px;box-shadow:0 10px 28px rgba(0,0,0,0.18);z-index:1100;cursor:pointer }
+    @media (max-width:520px){ .cart-panel{ width:92%; } #openCartBtn{ right:14px; bottom:86px; } }
+
+    /* small helpers */
+    .muted-small{color:var(--muted);font-size:0.92rem}
+    @media (max-width:880px){
+      .modal-grid{ grid-template-columns: 1fr; }
+      .modal-media img{ height:220px; }
+      .hero{grid-template-columns:1fr; padding:20px}
+    }
+    @media (max-width:560px){
+      .brand-name{font-size:1rem}
+      .logo{width:48px;height:48px}
+      .product .thumb{height:160px}
+    }
+  
+
+    /* CLICK-POP ANIMATION (ditambahkan) */
+    .product:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(0,0,0,0.08)}
+    .product:active{transform:scale(.98)}
+    .product .thumb{cursor:pointer}
+    .click-pop{transform:scale(1.06) !important;box-shadow:0 18px 40px rgba(0,0,0,0.12) !important}
+
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- HEADER -->
+    <header>
+      <div class="brand" style="align-items:center;">
+        <div class="logo" aria-hidden="true">
+          <img src="images/logo1.png" alt="Logo Vionae">
+        </div>
+        <div style="display:flex;flex-direction:column;justify-content:center;">
+          <div class="brand-name">Vionae_Collection</div>
+          <div style="font-size:0.88rem;color:var(--muted)">Aksesori — Elegan & Terjangkau</div>
+        </div>
+      </div>
+
+      <nav>
+        <a href="#home">Home</a>
+        <a href="#promo">Promo</a>
+        <a href="#featured">Unggulan</a>
+        <a href="#catalog">Katalog</a>
+        <a href="#kontak" class="cta">Kontak</a>
+      </nav>
+    </header>
+
+    <!-- HERO -->
+    <section id="home" class="hero" aria-label="Beranda">
+      <div>
+        <h1>Selamat datang di Vionae_Collection</h1>
+        <p>Perhiasan dan aksesori pilihan untuk momen spesial dipilih dengan teliti dan dikemas cantik. Jelajah cepat promo dan koleksi unggulan kami.</p>
+        <div class="actions">
+          <a href="#catalog" class="cta">Lihat Katalog</a>
+          <a href="#promo" style="padding:10px 12px;border-radius:10px;border:1px solid #eee;color:var(--muted)">Promo Terbaru</a>
+        </div>
+        <div style="margin-top:16px;color:var(--muted);font-size:0.95rem">Gratis ongkir untuk pembelian tertentu. Promo terbatas.</div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px;align-items:stretch;">
+        <div class="hero-sign">
+          <img src="images/allon.png" alt="Vionae Signature" />
+        </div>
+        <div style="display:flex;gap:10px">
+          <div style="flex:1;padding:10px;background:#fff;border-radius:10px;border:1px solid #f0e9ea;text-align:center">Kualitas Terjamin</div>
+          <div style="flex:1;padding:10px;background:#fff;border-radius:10px;border:1px solid #f0e9ea;text-align:center">Packing Rapi</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROMO -->
+    <section id="promo" style="margin-top:10px">
+      <div class="promo-wrap">
+        <h2 style="margin-bottom:8px">Promo Terbaru</h2>
+        <p style="color:var(--muted);margin-bottom:12px">Ikuti promo mingguan dan diskon eksklusif kami.</p>
+        <div class="promo-list" id="promoList"></div>
+      </div>
+    </section>
+
+    <!-- FEATURED -->
+    <section id="featured" style="margin-top:6px">
+      <h2 style="margin-bottom:10px">Produk Unggulan</h2>
+      <div class="featured" id="featuredList"></div>
+    </section>
+
+    <div class="divider" aria-hidden="true"><strong>Ke Katalog Lengkap</strong></div>
+
+    <!-- CATALOG -->
+    <section id="catalog">
+      <h2 style="margin-bottom:10px">Semua Produk</h2>
+      <div class="catalog-grid" id="catalogGrid"></div>
+    </section>
+
+    <!-- CONTACT + FEEDBACK -->
+    <section id="kontak" style="margin-top:18px;display:grid;grid-template-columns:1fr 420px;gap:18px">
+      <div>
+        <h3>Kontak & Toko</h3>
+        <div class="contact-panel">
+          <div class="contact-row">
+            <div class="chip">WhatsApp</div>
+            <a id="waLink" href="#" target="_blank" rel="noopener" aria-label="Chat via WhatsApp">+62 881024205646</a>
+          </div>
+
+          <div class="contact-row">
+            <div class="chip">Instagram</div>
+            <a id="igLink" href="#" target="_blank" rel="noopener">@vionae_collection</a>
+          </div>
+
+          <div class="contact-row">
+            <div class="chip">Tokopedia</div>
+            <a id="tpLink" href="#" target="_blank" rel="noopener">Sedang proses</a>
+          </div>
+
+          <div class="contact-row">
+            <div class="chip">Shopee</div>
+            <a id="shpLink" href="#" target="_blank" rel="noopener">Shopee / Vionae</a>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3>Masukan & Saran</h3>
+        <div class="feedback">
+          <!-- Form: sekarang diarahkan ke WhatsApp -->
+          <form id="feedbackForm">
+            <label for="name">Nama *</label>
+            <input id="name" required placeholder="Nama lengkap">
+
+            <label for="contact" style="margin-top:10px">Kontak (WA / Email)</label>
+            <input id="contact" placeholder="0812xxxx atau email@contoh.com">
+
+            <label for="message" style="margin-top:10px">Pesan / Saran *</label>
+            <textarea id="message" rows="4" required placeholder="Tulis masukan Anda..."></textarea>
+
+            <button id="submitBtn" type="submit" class="submit">Kirim Masukan ke WhatsApp</button>
+            <div id="formStatus" style="margin-top:8px;color:var(--muted)"></div>
+            <div id="formHelp" class="muted-small" style="margin-top:8px;color:var(--muted)"></div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      © <span id="year"></span> Vionae_Collection — Instagram: <span id="igFooter">@vionae_collection</span>
+    </footer>
+  </div>
+
+  <!-- PRODUCT DETAIL MODAL -->
+  <div id="productModal" aria-hidden="true">
+    <div class="modal-backdrop" id="modalBackdrop"></div>
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDesc">
+      <button class="modal-close" id="modalClose" aria-label="Tutup detail">&times;</button>
+      <div class="modal-grid">
+        <div class="modal-media">
+          <img id="modalImage" src="" alt="">
+        </div>
+        <div class="modal-info">
+          <h3 id="modalTitle" class="modal-name"></h3>
+          <div class="modal-price" id="modalPrice"></div>
+          <div id="modalDesc" class="modal-desc muted-small"></div>
+
+          <div style="margin-top:12px;display:flex;gap:8px;align-items:center">
+            <label for="modalQty" style="font-weight:700;color:var(--muted);">Jumlah</label>
+            <input id="modalQty" type="number" min="1" value="1" style="width:72px;padding:8px;border-radius:8px;border:1px solid rgba(0,0,0,0.06)">
+          </div>
+
+          <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
+            <button id="modalOrder" class="wa-btn" style="background:#25D366">Pesan via WA</button>
+            <button id="modalAddToCart" class="submit" style="background:#fff;color:#222;border:1px solid #eee">Tambah ke Keranjang</button>
+          </div>
+
+          <div id="modalMeta" style="margin-top:12px;color:var(--muted);font-size:0.9rem"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CART DRAWER -->
+  <div id="cartDrawer" aria-hidden="true">
+    <div class="cart-backdrop" id="cartBackdrop"></div>
+    <aside class="cart-panel" role="dialog" aria-modal="true" aria-labelledby="cartTitle">
+      <header style="display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(0,0,0,0.04)">
+        <h3 id="cartTitle" style="margin:0;font-size:1.05rem">Keranjang Belanja</h3>
+        <button id="cartClose" aria-label="Tutup keranjang" style="background:none;border:0;font-size:20px;cursor:pointer">×</button>
+      </header>
+
+      <div id="cartBody" style="padding:14px;max-height:60vh;overflow:auto">
+        <!-- items will render here -->
+      </div>
+
+      <div style="padding:14px;border-top:1px solid rgba(0,0,0,0.04);display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div style="font-weight:700">Total</div>
+          <div id="cartTotal" style="font-weight:900;color:var(--accent)">Rp 0</div>
+        </div>
+
+        <div style="display:flex;gap:10px">
+          <button id="cartCheckout" class="wa-btn" style="flex:1;background:#25D366">Checkout via WA</button>
+          <button id="cartClear" class="submit" style="flex:1;background:#fff;color:#222;border:1px solid #eee">Kosongkan</button>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- small floating cart button -->
+  <button id="openCartBtn" aria-label="Buka keranjang">Keranjang (<span id="cartCount">0</span>)</button>
+
+  <!-- toast -->
+  <div id="toast" style="position:fixed;right:20px;bottom:20px;background:#111;color:#fff;padding:12px 16px;border-radius:10px;box-shadow:0 12px 36px rgba(0,0,0,0.2);transform:translateY(12px);opacity:0;transition:all .28s ease;z-index:9999"></div>
+
+  <script>
+    /* ========= CONFIG: ganti ke data kamu ======== */
+    const CONFIG = {
+      waNumber: '+62881024205646',    // nomor WA yang dipakai untuk link
+      waDisplay: '+62 881024205646',
+      igUrl: 'https://www.instagram.com/vionae_collection?igsh=MW4xNGdnNGdpY2dyYw==',
+      igHandle: '@vionae_collection',
+      tokopediaUrl: '#', // masih proses
+      shopeeUrl: 'https://shopee.co.id/vionaecollection'
+    };
+    /* ============================================== */
+
+    // contoh data (dengan desc untuk modal)
+    const PROMOS = [
+      {title:'Diskon 15% Semua Gelang', desc:'Gunakan kode VIONAE15 — berlaku hingga akhir bulan.'},
+      {title:'Gratis Packing Kado', desc:'Gratis pembungkusan kado untuk pembelian > 1 item.'}
+    ];
+
+    const FEATURED = [
+      {id:201,name:'Gelang Stone Mist (Unggulan)',price:11000,img:'images/Gelang 3.jpg', desc: 'Gelang Aurora: manik-manik berkualitas, cocok untuk hadiah.'},
+      {id:202,name:'Kalung Floral Heart (Unggulan)',price:22500,img:'images/Kalung 2.jpeg', desc: 'Kalung Luna: desain elegan, rantai tahan lama.'},
+      {id:203,name:'Kalung Cosmic Blue (Unggulan)',price:22000,img:'images/Kalung 4.jpeg', desc: 'Set Layer: padu padan cantik untuk tampilan sehari-hari.'}
+    ];
+
+    const CATALOG = [
+      {id:1, name:'Gelang Frost Blue',                price:12200,  img:'images/Gelang 1.jpg', desc: 'Gelang bernuansa biru es dengan kilau lembut yang memberi kesan bersih dan elegan. Cocok dipakai harian maupun untuk tampilan feminin yang tenang.'},
+      {id:2, name:'Gelang Midnight Star',                 price:12000,  img:'images/Gelang 2.jpg', desc: 'Perpaduan manik kristal bening dengan sentuhan biru langit. Memberikan efek fresh dan ringan, mudah dipadukan dengan outfit kasual hingga semi-formal.'},
+      {id:3, name:'Gelang Stone Mist',          price:11000, img:'images/Gelang 3.jpg', desc: 'Gelang dengan karakter batu alam bertekstur halus, tampil kalem dan natural. Memberi kesan dewasa, rapi, dan tidak berlebihan.'},
+      {id:4, name:'Gelang Ice Clear',             price:12000, img:'images/Gelang 4.jpg', desc: 'Desain transparan dengan kilau jernih yang simple namun mewah. Pilihan aman untuk semua gaya dan semua usia.'},
+      {id:5, name:'Gelang Soft Blush',          price:12000, img:'images/Gelang 5.jpg', desc: 'Warna lembut dengan sentuhan pink pucat yang manis. Memberi kesan feminin, soft, dan cocok untuk daily wear'},
+      {id:6, name:'Gelang Ocean Tear',             price:13000, img:'images/Gelang 6.jpg', desc: 'Inspirasi embun pagi berwarna biru. Tampilan segar dengan kilau ringan yang terlihat hidup saat terkena cahaya.'},
+      {id:7, name:'Gelang Violet Flutter',             price:13000, img:'images/Gelang 7.jpg', desc: 'Kombinasi ungu muda dan transparan yang unik. Memberi kesan dreamy, lembut, dan modern dalam satu gelang.'},
+      {id:8, name:'Kalung Feather Moon',             price:22000, img:'images/Kalung 1.jpeg', desc: 'Desain bulan dengan sentuhan feather yang halus, memberi kesan ringan dan elegan.'},
+      {id:9, name:'Kalung Floral Heart',                 price:22000, img:'images/Kalung 2.jpeg', desc: 'Bentuk hati dengan detail bunga yang manis, cocok untuk tampilan feminin dan romantis.'},
+      {id:10,name:'Kalung Garden Tale',                 price:22000, img:'images/Kalung 3.jpeg', desc: 'Desain bernuansa alam dengan detail lembut yang memberi kesan tenang dan anggun.'},
+      {id:11,name:'Kalung Butterfly Garden',                   price:22000,  img:'images/Kalung 4.jpeg', desc: 'Perpaduan kupu-kupu dan bunga yang cantik, memberi kesan ceria namun tetap elegan.'},
+      {id:12,name:'Kalung Cosmic Blue',               price:22000, img:'images/Kalung 5.jpeg', desc: 'Aksen biru kosmik dengan kilau halus, memberi kesan modern dan dreamy.'},
+      {id:13,name:'Kalung Twinkle Moon',                 price:22000,  img:'images/Kalung 6.jpeg', desc: 'Desain bulan berkilau dengan sentuhan bintang kecil yang terlihat manis dan bersih.'},
+      {id:14,name:'Kalung Pure Bloom',                   price:22000, img:'images/Kalung 7.jpeg', desc: 'Detail bunga sederhana dengan tampilan clean dan elegan, cocok untuk daily wear.'},
+      {id:15,name:'Kalung Mystic Bloom',                price:22000,  img:'images/Kalung 8.jpeg', desc: 'Nuansa misterius dengan kilau lembut, memberi sentuhan unik tanpa terlihat berlebihan.'},
+      {id:16,name:'Kalung Violet Vine',                  price:22000,  img:'images/Kalung 9.jpeg', desc: 'Detail sulur dan warna ungu yang anggun, tampil lembut dan feminin.'},
+      {id:17,name:'Kalung Lunar Glow',                  price:22000, img:'images/Kalung 10.jpeg', desc: 'Desain bulan dengan kilau jernih yang memberi efek bercahaya saat dikenakan.'},
+      {id:18,name:'Kalung Tear of Sky',            price:22000, img:'images/Kalung 11.jpeg', desc: 'Liontin tetesan biru bening yang terlihat ringan, bersih, dan elegan.'},
+    ];
+
+    /* ========== RENDER UI ========== */
+    document.addEventListener('DOMContentLoaded', () => {
+      // promo
+      const promoList = document.getElementById('promoList');
+      PROMOS.forEach(p => {
+        const d = document.createElement('div');
+        d.style.minWidth = '220px';
+        d.style.padding = '12px';
+        d.style.borderRadius = '10px';
+        d.style.background = '#fff';
+        d.style.boxShadow = '0 6px 18px rgba(0,0,0,0.04)';
+        d.innerHTML = `<strong style="color:var(--accent)">${p.title}</strong><div style="color:var(--muted);margin-top:6px">${p.desc}</div>`;
+        promoList.appendChild(d);
+      });
+
+      // featured
+      const featuredList = document.getElementById('featuredList');
+      FEATURED.forEach(p => {
+        const el = document.createElement('div');
+        el.className = 'featured-card';
+        el.innerHTML = `<img src="${p.img}" alt="${p.name}"><div style="font-weight:800">${p.name}</div><div style="color:var(--accent);font-weight:800">Rp ${p.price.toLocaleString('id-ID')}</div><div style="margin-top:auto"><button class="wa-btn" onclick="orderWhatsApp(${p.id})">Order via WA</button></div>`;
+        featuredList.appendChild(el);
+      });
+
+      // catalog
+      const catalogGrid = document.getElementById('catalogGrid');
+      CATALOG.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'product';
+        card.innerHTML = `
+          <div class="thumb"><img src="${p.img}" alt="${p.name}"></div>
+          <div class="name">${p.name}</div>
+          <div class="price">Rp ${p.price.toLocaleString('id-ID')}</div>
+          <div class="actions">
+            <button class="wa-btn" onclick="orderWhatsApp(${p.id})">Pesan via WA</button>
+            <a style="color:var(--muted);margin-left:8px" href="#" onclick="showDetail(${p.id});return false">Detail</a>
+          </div>
+        `;
+        catalogGrid.appendChild(card);
+      });
+
+      // kontak links
+      document.getElementById('waLink').textContent = CONFIG.waDisplay;
+      document.getElementById('waLink').href = `https://wa.me/${CONFIG.waNumber.replace(/\D/g,'')}`;
+      document.getElementById('igLink').textContent = CONFIG.igHandle;
+      document.getElementById('igLink').href = CONFIG.igUrl;
+      document.getElementById('tpLink').textContent = 'Sedang proses';
+      document.getElementById('tpLink').href = CONFIG.tokopediaUrl;
+      document.getElementById('shpLink').textContent = 'Shopee / Vionae';
+      document.getElementById('shpLink').href = CONFIG.shopeeUrl;
+
+      document.getElementById('year').textContent = new Date().getFullYear();
+      document.getElementById('igFooter').textContent = CONFIG.igHandle;
+
+      // wire modal add-to-cart to new cart logic
+      document.getElementById('modalAddToCart').addEventListener('click', function(){
+        const idAttr = document.getElementById('modalMeta').textContent.match(/ID:\s*(\d+)/);
+        const id = idAttr ? Number(idAttr[1]) : null;
+        const qty = Number(document.getElementById('modalQty').value) || 1;
+        if (id) addToCartFromUI(id, qty);
+      });
+
+      // initialize cart badge
+      updateCartBadge();
+
+      // feedback form: explicitly route to WhatsApp
+      const formHelp = document.getElementById('formHelp');
+      formHelp.textContent = `Masukan akan dikirim via WhatsApp ke ${CONFIG.waDisplay}.`;
+
+      const feedbackForm = document.getElementById('feedbackForm');
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.disabled = false;
+
+      feedbackForm.addEventListener('submit', function(e){
+        e.preventDefault();
+        const name = document.getElementById('name').value.trim();
+        const contact = document.getElementById('contact').value.trim();
+        const message = document.getElementById('message').value.trim();
+        if(!name || !message){
+          showToast('Mohon isi Nama dan Pesan.', true);
+          return;
+        }
+        const number = CONFIG.waNumber.replace(/\D/g,'');
+        let summary = `Halo Vionae, saya ingin menyampaikan masukan dari website.` + "\n\n";
+        summary += `Nama: ${name}` + "\n";
+        if(contact) summary += `Kontak: ${contact}` + "\n";
+        summary += "\nPesan:\n" + message + "\n";
+
+        // open WA chat with prefilled message
+        window.open(`https://wa.me/${number}?text=${encodeURIComponent(summary)}`, '_blank');
+        showToast('Membuka WhatsApp...');
+        feedbackForm.reset();
+      });
+
+      // required field UX
+      feedbackForm.querySelectorAll('[required]').forEach(el=>{
+        el.addEventListener('invalid', (ev)=>{
+          ev.preventDefault();
+          showToast('Mohon isi kolom yang wajib diisi.', true);
+          el.focus();
+        });
+      });
+    });
+
+    // order via WA (quick)
+    function orderWhatsApp(id){
+      const product = CATALOG.concat(FEATURED).find(x=>x.id===id);
+      if(!product) return showToast('Produk tidak ditemukan.', true);
+      const text = `Halo Vionae, saya mau pesan: ${product.name} (ID:${product.id}). Harga: Rp ${product.price.toLocaleString('id-ID')}. Mohon info ketersediaan & metode pembayaran.`;
+      const number = CONFIG.waNumber.replace(/\D/g,'');
+      window.open(`https://wa.me/${number}?text=${encodeURIComponent(text)}`, '_blank');
+    }
+
+    // modal detail (replaces alert)
+    function showDetail(id){
+      const p = CATALOG.concat(FEATURED).find(x=>x.id===id);
+      if(!p) return showToast('Produk tidak ditemukan.', true);
+
+      document.getElementById('modalImage').src = p.img || 'images/allone.jpeg';
+      document.getElementById('modalImage').alt = p.name || 'Produk';
+      document.getElementById('modalTitle').textContent = p.name || '';
+      document.getElementById('modalPrice').textContent = 'Rp ' + (p.price || 0).toLocaleString('id-ID');
+      document.getElementById('modalDesc').textContent = p.desc || 'Deskripsi belum tersedia. Silakan hubungi kami untuk detail lebih lanjut.';
+      document.getElementById('modalQty').value = 1;
+      document.getElementById('modalMeta').textContent = `ID: ${p.id} • Stok: tersedia`;
+
+      const orderBtn = document.getElementById('modalOrder');
+      orderBtn.onclick = function(){
+        const qty = Number(document.getElementById('modalQty').value) || 1;
+        const text = `Halo Vionae, saya mau pesan: ${p.name} (ID:${p.id}) x${qty}. Harga satuan: Rp ${p.price.toLocaleString('id-ID')}. Mohon info ketersediaan & metode pembayaran.`;
+        const number = CONFIG.waNumber.replace(/\D/g,'');
+        window.open(`https://wa.me/${number}?text=${encodeURIComponent(text)}`, '_blank');
+      };
+
+      // show modal
+      const modal = document.getElementById('productModal');
+      modal.style.display = 'flex';
+      setTimeout(()=> modal.classList.add('show'), 8);
+      modal.setAttribute('aria-hidden','false');
+
+      setupModalClose();
+    }
+
+    // modal close handlers (once)
+    function setupModalClose(){
+      const modal = document.getElementById('productModal');
+      if (modal._initialized) return;
+      modal._initialized = true;
+      const closeBtn = document.getElementById('modalClose');
+      const backdrop = document.querySelector('#productModal .modal-backdrop');
+
+      function closeModal(){
+        modal.classList.remove('show');
+        modal.setAttribute('aria-hidden','true');
+        setTimeout(()=> { modal.style.display = 'none'; }, 220);
+      }
+
+      closeBtn.addEventListener('click', closeModal);
+      backdrop.addEventListener('click', closeModal);
+      document.addEventListener('keydown', function(e){
+        if (e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') closeModal();
+      });
+    }
+
+    // toast helper
+    let toastTimer = null;
+    function showToast(msg, isError=false){
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.style.background = isError ? '#b23f6b' : '#111';
+      t.style.opacity = 1;
+      t.style.transform = 'translateY(0)';
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(()=>{ t.style.opacity = 0; t.style.transform = 'translateY(12px)'; }, 3000);
+    }
+
+    /* ========== CART (localStorage) ========== */
+    const CART_KEY = 'vionae_cart';
+    function readCart(){ return JSON.parse(localStorage.getItem(CART_KEY) || '[]'); }
+    function writeCart(cart){ localStorage.setItem(CART_KEY, JSON.stringify(cart)); updateCartBadge(); }
+    function addItemToCart(item){
+      const cart = readCart();
+      const idx = cart.findIndex(x=>x.id === item.id);
+      if(idx > -1){ cart[idx].qty += item.qty; } else { cart.push(item); }
+      writeCart(cart);
+      showToast(`${item.name} ditambahkan ke keranjang.`);
+    }
+
+    function addToCartFromUI(productId, qty = 1){
+      const p = (CATALOG || []).concat(FEATURED || []).find(x=>x.id===productId);
+      if(!p) return showToast('Produk tidak ditemukan.', true);
+      addItemToCart({ id: p.id, name: p.name, price: p.price, qty: qty, img: p.img });
+    }
+
+    // render cart drawer
+    function renderCart(){
+      const body = document.getElementById('cartBody');
+      const cart = readCart();
+      body.innerHTML = '';
+      if(cart.length === 0){
+        body.innerHTML = '<div style="padding:18px;color:var(--muted)">Keranjang kosong.</div>';
+        document.getElementById('cartTotal').textContent = 'Rp 0';
+        return;
+      }
+      let total = 0;
+      cart.forEach((it, i) => {
+        total += it.price * it.qty;
+        const row = document.createElement('div');
+        row.className = 'cart-item';
+        row.innerHTML = `
+          <img src="${it.img || 'images/allone.jpeg'}" alt="${escapeHtml(it.name)}">
+          <div class="info">
+            <div class="title">${escapeHtml(it.name)}</div>
+            <div class="muted-small">Rp ${it.price.toLocaleString('id-ID')} &times; <input type="number" class="cart-qty" value="${it.qty}" min="1" data-idx="${i}"></div>
+          </div>
+          <div class="actions">
+            <button class="cart-remove" data-idx="${i}" title="Hapus">Hapus</button>
+          </div>
+        `;
+        body.appendChild(row);
+      });
+
+      document.getElementById('cartTotal').textContent = 'Rp ' + total.toLocaleString('id-ID');
+
+      body.querySelectorAll('.cart-qty').forEach(input=>{
+        input.addEventListener('change', (e)=>{
+          const idx = Number(e.target.dataset.idx);
+          const val = Math.max(1, Number(e.target.value) || 1);
+          const cart = readCart();
+          cart[idx].qty = val;
+          writeCart(cart);
+          renderCart();
+        });
+      });
+      body.querySelectorAll('.cart-remove').forEach(btn=>{
+        btn.addEventListener('click', (e)=>{
+          const idx = Number(e.target.dataset.idx);
+          const cart = readCart();
+          const removed = cart.splice(idx,1)[0];
+          writeCart(cart);
+          renderCart();
+          showToast(`${removed.name} dihapus dari keranjang.`);
+        });
+      });
+    }
+
+    // cart drawer open/close & badge
+    const cartDrawer = document.getElementById('cartDrawer');
+    const openCartBtn = document.getElementById('openCartBtn');
+    const cartBackdrop = document.getElementById('cartBackdrop');
+    const cartClose = document.getElementById('cartClose');
+    openCartBtn.addEventListener('click', ()=>{ renderCart(); cartDrawer.style.display='flex'; setTimeout(()=>cartDrawer.classList.add('show'),8); cartDrawer.setAttribute('aria-hidden','false'); });
+    cartBackdrop.addEventListener('click', ()=> closeCart() );
+    cartClose.addEventListener('click', ()=> closeCart() );
+    function closeCart(){ cartDrawer.classList.remove('show'); cartDrawer.setAttribute('aria-hidden','true'); setTimeout(()=> cartDrawer.style.display='none', 220); }
+
+    function updateCartBadge(){
+      const cart = readCart();
+      const count = cart.reduce((s,i)=>s + (i.qty||0),0);
+      document.getElementById('cartCount').textContent = count;
+    }
+    updateCartBadge();
+
+    document.getElementById('cartClear').addEventListener('click', ()=>{
+      localStorage.removeItem(CART_KEY);
+      renderCart();
+      updateCartBadge();
+      showToast('Keranjang dikosongkan.');
+    });
+
+    // checkout via WA
+    document.getElementById('cartCheckout').addEventListener('click', ()=>{
+      const cart = readCart();
+      if(!cart || cart.length === 0){ showToast('Keranjang kosong.', true); return; }
+      let summary = 'Pesanan dari website Vionae_Collection:%0A%0A';
+      let total = 0;
+      cart.forEach(it=>{
+        summary += `${it.name} x${it.qty} — Rp ${it.price.toLocaleString('id-ID')}%0A`;
+        total += it.qty * it.price;
+      });
+      summary += `%0ATotal: Rp ${total.toLocaleString('id-ID')}%0A%0AMohon info ketersediaan & metode pembayaran.`;
+      const number = CONFIG.waNumber.replace(/\D/g,'');
+      window.open(`https://wa.me/${number}?text=${encodeURIComponent(summary)}`, '_blank');
+    });
+
+    // small helper
+    function escapeHtml(s){ if(!s && s !== 0) return ''; return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  
+
+    /* ===== tambahan JS: efek klik (pop) ===== */
+    (function(){
+      function animateClick(el, duration=180){
+        if(!el) return;
+        el.classList.add('click-pop');
+        setTimeout(()=> el.classList.remove('click-pop'), duration);
+      }
+
+      function bindClickPopEffects(){
+        // thumbnails (produk)
+        document.querySelectorAll('.product .thumb').forEach(thumb => {
+          thumb.setAttribute('tabindex','0');
+          thumb.addEventListener('click', ()=>{
+            animateClick(thumb);
+          });
+          thumb.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' ') { e.preventDefault(); thumb.click(); } });
+        });
+
+        // tombol interaktif
+        document.querySelectorAll('.wa-btn, .submit, .featured-card .wa-btn').forEach(btn => {
+          btn.addEventListener('mousedown', ()=> animateClick(btn));
+          btn.addEventListener('touchstart', ()=> animateClick(btn));
+        });
+      }
+
+      // expose helper if dev ingin memanggil secara manual
+      window.animateClick = animateClick;
+
+      document.addEventListener('DOMContentLoaded', bindClickPopEffects);
+    })();
+
+  </script>
+</body>
+</html>
