@@ -486,7 +486,7 @@
     function orderWhatsApp(id){
       const product = CATALOG.concat(FEATURED).find(x=>x.id===id);
       if(!product) return showToast('Produk tidak ditemukan.', true);
-      const text = `Halo Vionae, saya mau pesan: ${product.name} (ID:${product.id}). Harga: Rp ${product.price.toLocaleString('id-ID')}. Mohon info ketersediaan & metode pembayaran.`;
+      const text = `Halo Vionae, mau pesan ${product.name}. Harga Rp ${product.price.toLocaleString('id-ID')}. Ready?`;
       const number = CONFIG.waNumber.replace(/\D/g,'');
       window.open(`https://wa.me/${number}?text=${encodeURIComponent(text)}`, '_blank');
     }
@@ -507,7 +507,7 @@
       const orderBtn = document.getElementById('modalOrder');
       orderBtn.onclick = function(){
         const qty = Number(document.getElementById('modalQty').value) || 1;
-        const text = `Halo Vionae, saya mau pesan: ${p.name} (ID:${p.id}) x${qty}. Harga satuan: Rp ${p.price.toLocaleString('id-ID')}. Mohon info ketersediaan & metode pembayaran.`;
+        const text = `Halo Vionae, mau pesan ${product.name}. Harga Rp ${product.price.toLocaleString('id-ID')}. Ready?`;
         const number = CONFIG.waNumber.replace(/\D/g,'');
         window.open(`https://wa.me/${number}?text=${encodeURIComponent(text)}`, '_blank');
       };
@@ -701,4 +701,5 @@
   </script>
 </body>
 </html>
+
 
